@@ -1,41 +1,77 @@
-// creamos la carpeta de 0
-// creamos un archivo llamados index.js
-// utilizamos la terminal integrada npm init -y creamos el json
-// intalamos nodemon usando "npm install nodemon"
-// utilizamos nodemon para el script start del package.json
-// creamos una funcion para pedir los pokemon.
-//----------10------------------------------------------------------
-let pokemonesPorPagina = 2;
+let root = document.getElementById("root");
 
-async function correrPrograma() {
-  //Pedimos y nos llega la petición
-  const data = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?limit=${pokemonesPorPagina}`
-  ); //
-  // { } =nos llega un objeto convertido a Json
+let inputPPP = document.getElementById("pokemonesPorPagina"); //
+inputPPP.addEventListener("change", async (event) => {
+  root.innerHTML = "<div></div>";
+
+  let numero = event.target.value;
+
+  await pokemonesPorPagina(numero);
+});
+
+let inputBPN = document.getElementById("buscarPorNombre");
+inputBPN.addEventListener("change", async (event) => {
+  root.innerHTML = "<div></div>";
+  event.preventDefault();
+  let pokemonName = event.target.value;
+
+  await buscarPorNombre(pokemonName);
+});
+
+async function pokemonesPorPagina(numero) {
+  const data = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${numero}`);
+
   const jsondata = await data.json();
-  // = [ ] = entro a la propiedad results y obtengo un array de objetos
+
   const pokemones = jsondata.results;
-  // Entrar al array y pedir la propiedad que queramos de cada objeto
-  // ↓   ↓Declaras        ↓límite             ↓que hago despues de recorrer cada objeto
+
   for (let i = 0; i < pokemones.length; i++) {
-    const pokemon = pokemones[i]; //{} = tenemos un objeto
-    //Tengo que hacer una peticion a la url => pokemon.url= "https://pokeapi"
+    const pokemon = pokemones[i];
+
     const caracteristicas = await (await fetch(pokemon.url)).json();
 
-    const nombre = caracteristicas.name;
-    const imagen = caracteristicas.sprites.other.dream_world.front_default;
-    const tipo = caracteristicas.types.map((objeto) => objeto.type.name); //uno o mas poison, hierba
+    const nombre = caracteristicas.name; //"string"
+    const imagen = caracteristicas.sprites.other.dream_world.front_default; //"string"
+    const tipo = caracteristicas.types.map((objeto) => objeto.type.name); //"string"
+    //----------------------------------------------------------///
+    const pokemonHTML = `
+      <div class="pokemonCard">
+      <img src="  ${imagen} " />
+          <div>
+             <span id="nombrePokemon"> ${nombre} </span>
+          </div>
+           <div id="tipos-container"> 
+              <span>Tipo</span>
+              <span id="tipoPokemon"> ${tipo} </span>
+           </div>                
+      </div>
+      `;
 
-    console.log("Nombre:", nombre);
-    console.log("Imagen:", imagen.slice(0, 10));
-    console.log("Tipo:", tipo);
-
+    root.innerHTML += pokemonHTML;
   }
 }
 
-correrPrograma();
+async function buscarPorNombre(pokemonName) {
+  const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
 
-//endpoints usados
-//Todos: "https://pokeapi.co/api/v2/pokemon?limit=2"
-//1Pokemon: "https://pokeapi.co/api/v2/pokemon/5"
+  const caracteristicas = await data.json();
+
+  const nombre = caracteristicas.name; //"string"
+  const imagen = caracteristicas.sprites.other.dream_world.front_default; //"string"
+  const tipo = caracteristicas.types.map((objeto) => objeto.type.name); //"string"
+
+  const pokemonHTML = `
+      <div class="pokemonCard">
+      <img src="  ${imagen} " />
+          <div>
+             <span id="nombrePokemon"> ${nombre} </span>
+          </div>
+           <div id="tipos-container"> 
+              <span>Tipo</span>
+              <span id="tipoPokemon"> ${tipo} </span>
+           </div>                
+      </div>
+      `;
+
+  root.innerHTML += pokemonHTML;
+}
