@@ -36,6 +36,28 @@ inputPPP.addEventListener("change", async (event) => {
     root.innerHTML += pokemonHTML;
     //-------------------------------------------------------------//
   }
+
+  //Con for each
+  // pokemonesBuscados.forEach((pokemon) => {
+  //   const pokemonHTML = `
+  //   <div class="pokemonCard">
+  //   <img src="  ${
+  //     pokemon.imagen
+  //       ? pokemon.imagen
+  //       : "https://vader.news/__export/1588965166057/sites/gadgets/img/2020/05/08/2-25193_pokemon-ball-transparent-background-transparent-background-pokeball-png.png_423682103.png"
+  //   } " />
+  //       <div>
+  //          <span id="nombrePokemon"> ${pokemon.nombre} </span>
+  //       </div>
+  //        <div id="tipos-container"> 
+  //           <span>Tipo</span>
+  //           <span id="tipoPokemon"> ${pokemon.tipo} </span>
+  //        </div>                
+  //   </div>
+  //   `;
+
+  //   root.innerHTML += pokemonHTML;
+  // });
 });
 
 let inputBPN = document.getElementById("buscarPorNombre");
