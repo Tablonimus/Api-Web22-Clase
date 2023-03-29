@@ -1,7 +1,6 @@
-import { buscarPorNombre, pokemonesPorPagina } from "./api.js";
+import { buscarPorNombre, pokemonesPorPagina, buscarDetalle } from "./api.js";
 
 let root = document.getElementById("root");
-
 let inputPPP = document.getElementById("pokemonesPorPagina"); //
 
 inputPPP.addEventListener("change", async (event) => {
@@ -16,48 +15,44 @@ inputPPP.addEventListener("change", async (event) => {
 
   root.innerHTML = "";
 
-  //Con bucleFor?
+  const idDeboton = [];
   for (let i = 0; i < pokemonesBuscados.length; i++) {
     const pokemon = pokemonesBuscados[i];
+
+    idDeboton.push(pokemon.id);
     //----------------------------------------------------------///
     const pokemonHTML = `
-        <div class="pokemonCard">
+        <div class="pokemonCard" name="tarjeta" id=${pokemon.id}>
         <img src="  ${pokemon.imagen} " />
             <div>
                <span id="nombrePokemon"> ${pokemon.nombre} </span>
+               <span id="nombrePokemon"> ${pokemon.id} </span>
             </div>
              <div id="tipos-container">
-                <span>Tipo</span>
+                <span>Tipo de pokemon</span>
                 <span id="tipoPokemon"> ${pokemon.tipo} </span>
-             </div>
-        </div>
-        `;
+                <span id="tipoPokemon"> ${pokemon.tipo} </span>
+                                            
+                <button id=${pokemon.nombre}>
+                  VER MAS
+                 </button>
+             </div>         
+          </div>
+           `;
 
     root.innerHTML += pokemonHTML;
-    //-------------------------------------------------------------//
   }
 
-  //Con for each
-  // pokemonesBuscados.forEach((pokemon) => {
-  //   const pokemonHTML = `
-  //   <div class="pokemonCard">
-  //   <img src="  ${
-  //     pokemon.imagen
-  //       ? pokemon.imagen
-  //       : "https://vader.news/__export/1588965166057/sites/gadgets/img/2020/05/08/2-25193_pokemon-ball-transparent-background-transparent-background-pokeball-png.png_423682103.png"
-  //   } " />
-  //       <div>
-  //          <span id="nombrePokemon"> ${pokemon.nombre} </span>
-  //       </div>
-  //        <div id="tipos-container"> 
-  //           <span>Tipo</span>
-  //           <span id="tipoPokemon"> ${pokemon.tipo} </span>
-  //        </div>                
-  //   </div>
-  //   `;
+  for (let i = 0; i < idDeboton.length; i++) {
+    const id = idDeboton[i];
+    const pokemon = await buscarDetalle(id);
 
-  //   root.innerHTML += pokemonHTML;
-  // });
+    const botonVerMas = document.getElementById(id);
+    botonVerMas.addEventListener("click", (event) => {
+      event.preventDefault();
+      console.log(pokemon.name);
+    });
+  }
 });
 
 let inputBPN = document.getElementById("buscarPorNombre");

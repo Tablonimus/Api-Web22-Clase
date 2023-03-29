@@ -17,6 +17,7 @@ export async function pokemonesPorPagina(numero) {
     const caracteristicas = await (await fetch(pokemon.url)).json();
 
     const pokemonBuscado = {
+      id: caracteristicas.id,
       nombre: caracteristicas.name,
       imagen: caracteristicas.sprites.other.dream_world.front_default,
       tipo: caracteristicas.types.map((objeto) => objeto.type.name),
@@ -51,4 +52,10 @@ export async function buscarPorNombre(pokemonName) {
         `;
 
   root.innerHTML += pokemonHTML;
+}
+
+export async function buscarDetalle(id) {
+  const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+  const caracteristicas = await data.json();
+  return caracteristicas
 }
